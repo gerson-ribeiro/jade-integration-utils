@@ -123,6 +123,50 @@
           }
         }
       }
-    }},
-  "defaultProject": "jade-integration-app"
+    },
+    "jade-integration-utils": {
+      "projectType": "library",
+      "root": "projects/jade-integration-utils",
+      "sourceRoot": "projects/jade-integration-utils/src",
+      "prefix": "jiu",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/jade-integration-utils/tsconfig.lib.json",
+            "project": "projects/jade-integration-utils/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/jade-integration-utils/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/jade-integration-utils/src/test.ts",
+            "tsConfig": "projects/jade-integration-utils/tsconfig.spec.json",
+            "karmaConfig": "projects/jade-integration-utils/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/jade-integration-utils/tsconfig.lib.json",
+              "projects/jade-integration-utils/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "jade-integration-app",
+  "cli": {
+    "analytics": "98f33e2f-c1b6-40c8-8e6d-dccdbc02ac8c"
+  }
 }

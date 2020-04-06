@@ -14,7 +14,13 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "jade-integration-utils": [
+        "dist/jade-integration-utils/jade-integration-utils",
+        "dist/jade-integration-utils"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
