@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { JadeIntegrationUtilsModule } from 'projects/jade-integration-utils/src/public-api';
+import { CommonModule } from '@angular/common';
+import { FormsModule }   from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,9 @@ import { JadeIntegrationUtilsModule } from 'projects/jade-integration-utils/src/
   ],
   imports: [
     BrowserModule,
-    JadeIntegrationUtilsModule
+    CommonModule,
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
