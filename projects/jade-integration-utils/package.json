@@ -1,6 +1,6 @@
 {
   "name": "jade-integration-utils",
-  "version": "2.2.4",
+  "version": "2.3.5",
   "peerDependencies": {
     "@angular/common": "^9.1.0",
     "@angular/core": "^9.1.0",

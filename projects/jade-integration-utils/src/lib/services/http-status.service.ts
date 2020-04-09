@@ -20,28 +20,28 @@ export class HttpStatusService {
     StorageService.set(this._AUTH,"Bearer "+auth)
   }
 
-  get(endpoint: string, need_auth?: boolean): Promise<any> {
+  get<T>(endpoint: string, need_auth?: boolean): Promise<T> {
       let header = need_auth ? { headers: { Authorization : StorageService.get(this._AUTH) }}: null;
       if (endpoint.indexOf('http') > -1) {
-        if(header) return this.http.get(endpoint, header).toPromise();
-        else return this.http.get(endpoint).toPromise();
+        if(header) return this.http.get<T>(endpoint, header).toPromise();
+        else return this.http.get<T>(endpoint).toPromise();
       }
-      if(header) return this.http.get(this._url + endpoint, header).toPromise();
-      else return this.http.get(this._url + endpoint).toPromise();
+      if(header) return this.http.get<T>(this._url + endpoint, header).toPromise();
+      else return this.http.get<T>(this._url + endpoint).toPromise();
   }
 
-  post(endpoint: string, body: any): Promise<any> {
+  post<T>(endpoint: string, body: any): Promise<T> {
       let header = { headers: { Authorization : StorageService.get(this._AUTH) }};
-      return this.http.post(this._url + endpoint, body, header).toPromise();
+      return this.http.post<T>(this._url + endpoint, body, header).toPromise();
   }
 
-  put(endpoint: string, body: any): Promise<any> {
+  put<T>(endpoint: string, body: any): Promise<T> {
       let header = { headers: { Authorization : StorageService.get(this._AUTH) }};
-      return this.http.put(this._url + endpoint, body, header).toPromise();
+      return this.http.put<T>(this._url + endpoint, body, header).toPromise();
   }
 
-  delete(endpoint: string): Promise<any> {
+  delete<T>(endpoint: string): Promise<T> {
       let header = { headers: { Authorization : StorageService.get(this._AUTH) }};
-      return this.http.delete(this._url + endpoint, header).toPromise();
+      return this.http.delete<T>(this._url + endpoint, header).toPromise();
   }
 }

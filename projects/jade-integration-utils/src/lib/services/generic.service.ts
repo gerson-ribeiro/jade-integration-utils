@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpStatusService } from './http-status.service';
+import { Result } from '../Models/Paginator';
 
 @Injectable({
   providedIn: 'root'
@@ -15,28 +16,37 @@ export class GenericService {
     this.http.configure(url);
   }
 
-  list(endpoint?: string, body?: any, need_auth?:boolean): Promise<any> {
-      return this.http.get('/' + endpoint,need_auth);
+  list<T>(endpoint?: string, body?: T, need_auth?:boolean): Promise<Result<T>> {
+      return this.http.get<Result<T>>('/' + endpoint,need_auth);
   }
 
-  listExterno(endpoint?: string, body?: any): Promise<any> {
-      return this.http.get(endpoint, false);
+  listExterno<T>(endpoint?: string, body?: T): Promise<Result<T>> {
+      return this.http.get<Result<T>>(endpoint, false);
   }
 
-  getById(id: any, endpoint?: string): Promise<any> {
-      return this.http.get('/' + endpoint + '/' + id, true);
+  getById<T>(id: number, endpoint?: string): Promise<Result<T>> {
+      return this.http.get<Result<T>>('/' + endpoint + '/' + id, true);
   }
 
-  create(body: any, endpoint?: string): Promise<any> {
-      return this.http.post('/' + endpoint, body);
+  /**
+   * Use to request POST.
+   * @param body K -> K is the model dto to pass with body
+   * @param endpoint String -> string to be pass with endpoint access
+   */
+  create<T,K>(body: K, endpoint?: string): Promise<Result<T>> {
+      return this.http.post<Result<T>>('/' + endpoint, body);
   }
 
-  update(body: any, endpoint?: string): Promise<any> {
-      return this.http.put('/' + endpoint, body);
+  /**
+   * Use to request POST.
+   * @param body K -> K is the model dto to pass with body
+   * @param endpoint String -> string to be pass with endpoint access
+   */
+  update<T,K>(body: K, endpoint?: string): Promise<Result<T>> {
+      return this.http.put<Result<T>>('/' + endpoint, body);
   }
 
-  delete(id: any, endpoint?: string): Promise<any> {
-      return this.http.delete('/' + endpoint + '/' + id);
+  delete<T>(id: any, endpoint?: string): Promise<Result<T>> {
+      return this.http.delete<Result<T>>('/' + endpoint + '/' + id);
   }
-
 }
