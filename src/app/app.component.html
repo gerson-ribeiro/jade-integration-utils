@@ -1,7 +1,10 @@
 <input type="text" name="name" [(ngModel)]="name" (keydown.enter)="search()">
 <button (click)="search()">Procurar</button>
-<div *ngFor="let card of listcards">
+<!-- <div *ngFor="let card of listcards">
   <p>{{card.name}}</p>
   <p>{{card.manaCost}}</p>
   <p>{{card.type}}</p>
+</div> -->
+<div>
+  {{ this.listcards }}
 </div>

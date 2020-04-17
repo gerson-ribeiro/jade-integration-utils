@@ -20,8 +20,13 @@ export class GenericService {
       return this.http.get<Result<T>>('/' + endpoint,need_auth);
   }
 
-  listExterno<T>(endpoint?: string, body?: T): Promise<Result<T>> {
-      return this.http.get<Result<T>>(endpoint, false);
+  /**
+   *
+   * @param endpoint end point to access
+   * @param queryParams a string for example: name=Ronaldo&type=2 doesn't write ?
+   */
+  listExterno<T>(endpoint?: string, queryParams?: string): Promise<Result<T>> {
+    return this.http.get<Result<T>>('/' +endpoint+'?'+queryParams, false);
   }
 
   getById<T>(id: number, endpoint?: string): Promise<Result<T>> {
@@ -33,8 +38,8 @@ export class GenericService {
    * @param body K -> K is the model dto to pass with body
    * @param endpoint String -> string to be pass with endpoint access
    */
-  create<T,K>(body: K, endpoint?: string): Promise<Result<T>> {
-      return this.http.post<Result<T>>('/' + endpoint, body);
+  create<T,K>(body: K, endpoint?: string,need_auth?:boolean): Promise<Result<T>> {
+      return this.http.post<Result<T>>('/' + endpoint, body,need_auth);
   }
 
   /**
@@ -46,7 +51,14 @@ export class GenericService {
       return this.http.put<Result<T>>('/' + endpoint, body);
   }
 
-  delete<T>(id: any, endpoint?: string): Promise<Result<T>> {
+  delete<T>(id: number, endpoint?: string): Promise<Result<T>> {
       return this.http.delete<Result<T>>('/' + endpoint + '/' + id);
+  }
+
+  public set_token(auth: string): void {
+    this.http.set_token(auth);
+  }
+  public get_token(): string {
+    return this.http.get_token();
   }
 }

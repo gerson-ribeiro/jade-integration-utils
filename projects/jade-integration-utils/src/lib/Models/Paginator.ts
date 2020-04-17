@@ -1,12 +1,12 @@
 export class Error
 {
-  public Route: string;
-  public ErrorDescription: string;
+  public route: string;
+  public errorDescription: string;
 }
 
 export class Result<T>
 {
-    public Objects: Array<T>;
-    public Target: T;
-    public Url: string;
+    public objects: Array<T>;
+    public target: T;
+    public url: string;
 }
