@@ -1,10 +1,11 @@
 <input type="text" name="name" [(ngModel)]="name" (keydown.enter)="search()">
 <button (click)="search()">Procurar</button>
-<!-- <div *ngFor="let card of listcards">
-  <p>{{card.name}}</p>
-  <p>{{card.manaCost}}</p>
-  <p>{{card.type}}</p>
-</div> -->
-<div>
-  {{ this.listcards }}
+<div *ngIf="this.dataService.loading">
+  Carregando...
+</div>
+<div *ngIf="!this.dataService.loading" style="display:block; max-width: 100%;">
+  <div *ngFor="let card of dataService.results.cards" style="text-align: center; width:100px;">
+    <img [src]="card.imageUrl" style="max-width: 100px;" *ngIf="card.imageUrl"/>
+    <p *ngIf="card.imageUrl">{{card.name}}</p>
+  </div>
 </div>

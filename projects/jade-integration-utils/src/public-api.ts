@@ -14,5 +14,11 @@ export * from './lib/directives/check-role.directive';
 /* Decorators */
 export * from './lib/decorators/loading.decorator';
 
+/* Class */
+export * from './lib/Models/DataAccess';
+
+/* Interfaces */
+export * from './lib/interfaces/IDataService';
+
 /* Module */
 export * from './lib/jade-integration-utils.module';
