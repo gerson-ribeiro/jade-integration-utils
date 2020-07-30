@@ -20,10 +20,7 @@ export let InjectorInstance: Injector;
   exports:[
     HttpClientModule
   ],
-  bootstrap:[JadeIntegrationUtilsComponent],
-  providers:[
-    GenericService
-  ]
+  bootstrap:[JadeIntegrationUtilsComponent]
 })
 export class JadeIntegrationUtilsModule {
   constructor(private _injector: Injector) {

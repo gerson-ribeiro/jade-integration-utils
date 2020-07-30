@@ -1,29 +1,183 @@
-# JadeIntegrationApp
+## JadeIntegrationUtils
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.0.
+A tool made for any type of http requisitions and to manage localstorage.
+This package works into Angular and Ionic projects (maybe you can run this on ReactNative, MAYBE!).
 
-## Development server
+## Setup
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+First use
+```
+npm install jade-integration-utils --save
+```
+then...
 
-## Code scaffolding
+### _RESTful api Setup_
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1. Declare DataService on your model:
+Example:
+```
+export class Model extends DataService<Model>{
+  constructor(genericService: GenericService) {
+    super(genericService,"https://my.providers.here","my_endpoint");
+    /** another things here */
+  }
+  public id: number;
+  /** another things here  */
+}
+```
+2. In your component, anything like that:
 
-## Build
+```
+/** same imports here */
+import { GenericService } from 'jade-integration-utils';
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+@Component({
+  selector: 'app-model',
+  templateUrl: './model.page.html',
+  styleUrls: ['./model.page.scss'],
+})
+export class ModelPage implements OnInit {
+  public model: Model;
 
-## Running unit tests
+  constructor(
+    /** Import Here */
+    generic_service: GenericService
+  ) { 
+    /** Reference service here again */
+    this.model = new Model(generic_service);
+  }
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  ngOnInit() {
+  }
 
-## Running end-to-end tests
+  public search():void {
+    /** call find to send "get" */
+    this.model.find();
+  }
+}
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+```
 
-## Further help
+3. In your module, import HttpClientModule:
+```
+/** same imports here */
+import { HttpClientModule } from '@angular/common/http';
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-# jade-integration-utils
-# jade-integration-utils
+@NgModule({
+  declarations: [AppComponent],
+  entryComponents: [],
+  imports: [
+    /** another import */
+    HttpClientModule,
+    /** another import */
+  ],
+  .
+  .
+  .
+})
+export class AppModule {}
+
+```
+After that, you can access the response of your requisition in ```this.model.results```, then you could use it in your code;
+
+```
+  <div *ngFor="let model of model.results; let index = i">
+    <!-- Anything here -->
+  </div>
+```
+To use Post and Put, you can set the attributes on ```this.model.target```, and send a body with these configuration.
+
+```
+  public save(): void{
+    this.model.post(body_if_I_want,(results)=>{ /** callback function if i need */});
+  }
+  /** In put method you can't send a body in method, in this case, use this.model.target */
+  public update(): void{
+    this.model.put((results)=>{ /** callback function if i need */});
+  }
+```
+This way you could use ```this.model.loading``` to set up html things, until the httpRequest finish.
+Example:
+```
+  <div *if="model.loading">
+    Loading ...
+  </div>
+  <div *if="!model.loading">
+    <div *ngFor="let model of model.results; let index = i">
+      <!-- Anything here -->
+    </div>
+  </div>
+```
+Okay, but I don't want to implement on models! 
+What should I do?
+
+#### Simple setup
+A simple way to implement Http Requisitions:
+```
+export clas AnotherClassComponent 
+  constructor(
+    generic_service: GenericService
+  ) { 
+    generic_service.configureHttp("http://my.provider.here");
+  }
+
+```
+
+Every methods on GenericService return a Promise, having this in mind, the implementation of methods would like that:
+
+```
+  public methods(): void{
+    this._genericService.getById<any>(id,"endpoint")
+    .then((result)=>{ /** a function to do next */})
+    .catch((error)=>{})
+    
+    this._genericService.get<any>("endpoint","query parameters without ?")
+    .then((result)=>{ /** a function to do next */})
+    .catch((error)=>{})
+
+    this._genericService.post<any,any>("body","endpoint")
+    .then((result)=>{ /** a function to do next */})
+    .catch((error)=>{})
+    
+    this._genericService.put<any, any>("body","endpoint")
+    .then((result)=>{ /** a function to do next */})
+    .catch((error)=>{})
+
+    this._genericService.delete<any>("id","endpoint")
+    .then((result)=>{ /** a function to do next */})
+    .catch((error)=>{})
+  }
+```
+## Local Storage
+
+To use localstorage it's simple, inside a any function use:
+To Insert:
+```
+  public setFoo():void{
+    StorageService.set("index",object);
+    // or
+    StorageService.setTemp(object);
+    // or
+    StorageService.setSession("index",object);
+  }
+```
+To Get:
+```
+  public setFoo():void{
+    let index = StorageService.get("index");
+    // or
+    let indexTemp = StorageService.getTemp();
+    // or
+    let indexSession = StorageService.getSession("index");
+  }
+```
+To Clear:
+```
+  public setFoo():void{
+    StorageService.clearTemp();
+    // or
+    StorageService.clear(); // To clear all
+  }
+```
+Like it and Share!
+Enjoy!

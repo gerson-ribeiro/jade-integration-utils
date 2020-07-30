@@ -13,7 +13,7 @@ then...
 
 ### _RESTful api Setup_
 
-1. Declare DataService on your model:
+* **Declare DataService on your model**:
 Example:
 ```
 export class Model extends DataService<Model>{
@@ -25,7 +25,7 @@ export class Model extends DataService<Model>{
   /** another things here  */
 }
 ```
-2. In your component, anything like that:
+* **In your component, anything like that**:
 
 ```
 /** same imports here */
@@ -58,7 +58,7 @@ export class ModelPage implements OnInit {
 
 ```
 
-3. In your module, import HttpClientModule:
+* **In your module, import HttpClientModule**:
 ```
 /** same imports here */
 import { HttpClientModule } from '@angular/common/http';
@@ -114,7 +114,7 @@ What should I do?
 #### Simple setup
 A simple way to implement Http Requisitions:
 ```
-export clas AnotherClassComponent 
+export class AnotherClassComponent 
   constructor(
     generic_service: GenericService
   ) { 

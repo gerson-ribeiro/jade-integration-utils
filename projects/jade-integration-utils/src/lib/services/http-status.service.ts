@@ -9,10 +9,10 @@ export class HttpStatusService {
 
   private _url: string = '';
   private _AUTH: string = "auth";
-  private _options: { headers:{ "Content-Type":string, Authorization?: string, "Access-Control-Allow-Origin"?: string ,responseType: string}};
+  private _options: { headers:{ "Content-Type":string, Authorization?: string, "Access-Control-Allow-Origin"?: string},responseType: any};
 
   constructor(private http: HttpClient) {
-    this._options = { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", responseType:"json"}};
+    this._options = { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, responseType:"json"};
   }
 
   public configure(url: string) {
@@ -33,7 +33,17 @@ export class HttpStatusService {
     return this.http.get<T>(this._url + endpoint, this._options).toPromise();
   }
 
+  get_file(endpoint: string): Promise<any> {
+    this.options.responseType = "blob" as "json";
+    return this.http.get(this._url + endpoint, this._options).toPromise();
+  }
+
   post<T>(endpoint: string, body: any): Promise<T> {
+    return this.http.post<T>(this._url + endpoint, body, this._options).toPromise();
+  }
+
+  formData<T>(endpoint: string, body: any): Promise<T> {
+    delete this._options.headers["Content-Type"];
     return this.http.post<T>(this._url + endpoint, body, this._options).toPromise();
   }
 
@@ -51,6 +61,6 @@ export class HttpStatusService {
     return this._options;
   }
   public default_options(){
-    this._options = { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", responseType:"json"}};
+    this._options = { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, responseType:"json"};
   }
 }
