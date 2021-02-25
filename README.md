@@ -5,7 +5,7 @@ This package works into Angular and Ionic projects (maybe you can run this in Re
 
 ## Setup
 
-First use
+Installation
 ```
 npm install jade-integration-utils --save
 ```
@@ -73,7 +73,7 @@ export class ModelPage implements OnInit {
 
 #### OPTIONAL - Pagination in 4.x.x version!
 You could use pagination with the framework as optional way to implement.
-Note: In this case, I use ```*ngFor="let your_model_object of model.resource.results.element_list"´´´ to get list of response, but it is necessary implements "objects" to your get method to return this info.
+Note: In this case, I use ```*ngFor="let your_model_object of model.resource.results.element_list"``` to get list of response, but it is necessary implements "objects" to your get method to return this info.
 ```
 @Component({
   selector: 'app-model',
@@ -139,8 +139,8 @@ Here is a single example of backend service required returns to this feature:
     "target": {"your_object":null}
 }
 ```
-To use Post and Put, you can set the attributes on ```this.model.target```, and send a body with these configuration.
-Api's return you can retrive with ```this.model.resource.results´´´.
+To use Post and Put, you can set the attributes on ```this.model.resource.target```, and send a body with these configuration.
+Api's return you can retrive with ```this.model.resource.results```.
 ```
   public save(): void{
     this.model.resource.create(body_if_I_want,(results)=>{ /** callback function if i need */});
