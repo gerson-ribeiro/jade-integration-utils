@@ -6,7 +6,9 @@
 export * from './lib/services/event-emitter.service';
 export * from './lib/services/generic.service';
 export * from './lib/services/http-status.service';
+export * from './lib/services/http-xhr.service';
 export * from './lib/services/storage.service';
+export * from './lib/services/xhr-manager.service';
 
 /* Directives */
 export * from './lib/directives/check-role.directive';
@@ -15,7 +17,7 @@ export * from './lib/directives/check-role.directive';
 export * from './lib/decorators/loading.decorator';
 
 /* Class */
-export * from './lib/Models/DataAccess';
+export * from './lib/Models/DataService';
 
 /* Interfaces */
 export * from './lib/interfaces/IDataService';

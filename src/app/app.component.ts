@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Cards } from './models/cards';
 import { GenericService } from 'projects/jade-integration-utils/src/public-api';
 
@@ -12,10 +12,8 @@ export class AppComponent implements OnInit {
   public dataService: Cards;
 
   constructor(
-    _genericService: GenericService
   ) {
-    this.name = "";
-    this.dataService = new Cards(_genericService);
+    this.dataService = new Cards();
   }
 
   ngOnInit(): void {
@@ -24,7 +22,7 @@ export class AppComponent implements OnInit {
   }
 
   public search(){
-    this.dataService.find(this.name ? "name="+this.name : null);
+    this.dataService.get(this.dataService);
   }
   // public search(){
   //   this.dataService.create<any,any>({ Mail: "gerson@jedisistemas.com.br", Pass: "mainpaper2020" },'auth',false)

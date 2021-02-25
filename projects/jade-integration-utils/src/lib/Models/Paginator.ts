@@ -6,7 +6,10 @@ export class Error
 
 export class Result<T>
 {
-    public objects: Array<T>;
-    public target: T;
-    public url: string;
+  public fetch: number;
+  public page: number;
+  public itemsCount: number;
+  public objects: Array<T>;
+  public target: T;
+  public url: string;
 }
