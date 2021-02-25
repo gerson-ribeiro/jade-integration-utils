@@ -1,4 +1,5 @@
-import { HttpXHRService, StorageService } from "../../public-api";
+import { HttpXHRService} from "../services/http-xhr.service"
+import {StorageService } from "../services/storage.service";
 import { Result } from "../Models/Paginator";
 
 export class XHRManager{
@@ -25,7 +26,6 @@ export class XHRManager{
     }else{
       new_endpoint = '/'+ endpoint;
     }
-    this.auth = this.auth;
 
     return this.http_xhr.get<Result<T>>(new_endpoint);
   }
@@ -61,13 +61,11 @@ export class XHRManager{
     }else{
       new_endpoint = '/'+ endpoint;
     }
-    this.auth = this.auth;
 
     return this.http_xhr.get<any>(new_endpoint);
   }
 
   getById<T>(id: number, endpoint?: string): Promise<Result<T>> {
-    this.auth = this.auth;
 
     return this.http_xhr.get<Result<T>>('/' + endpoint + '/' + id);
   }
@@ -78,8 +76,6 @@ export class XHRManager{
    * @param endpoint String -> string to be pass with endpoint access
    */
   post<T,K>(body: K, endpoint?: string): Promise<Result<T>> {
-    this.auth = this.auth;
-
     return this.http_xhr.post<Result<T>>('/' + endpoint, body);
   }
 

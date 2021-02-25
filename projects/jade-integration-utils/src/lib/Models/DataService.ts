@@ -1,11 +1,10 @@
-import { StorageService } from '../../public-api';
+import { StorageService } from '../services/storage.service';
 import { IDataService } from '../interfaces/IDataService';
-import { HttpXHRService } from '../services/http-xhr.service';
 import { XHRManager } from '../services/xhr-manager.service';
 import { Result } from './Paginator';
 
 
-export abstract class DataService<T> implements IDataService{
+export class DataService<T> implements IDataService{
   public static user_session: string = "session-user";
   public element_list: Array<T>;
   public target: T;
@@ -50,16 +49,16 @@ export abstract class DataService<T> implements IDataService{
     this.page = result.page;
     this.fetch = result.fetch;
     this.itemsCount = result.itemsCount;
-    this.element_list = result.objects;
-    this.target = result.target;
+    if(result.objects != null) this.element_list = result.objects;
+    if(result.target != null) this.target = result.target;
     this.results = result;
 
     this.get_pages_array();
   }
 
-  public get(): void {
+  public get(filter?: T,pagination: boolean = false): void {
     this.loading = true;
-    let query = this.serialize_query(this.target)+this.get_pagination_query();
+    let query = this.serialize_query(filter)+ (pagination ? this.get_pagination_query(): '');
 
     this.xMan.get<T>(this._endpoint,query)
     .then((result)=> this.bind_results(result))
@@ -67,23 +66,23 @@ export abstract class DataService<T> implements IDataService{
     .finally(()=> this.loading = false);
   }
 
-  public getAll(): void {
+  public getAll(pagination: boolean = false): void {
     this.loading = true;
-
-    this.xMan.get<T>(this._endpoint,this.get_pagination_query())
+    let pagination_query = (pagination ? this.get_pagination_query(): '');
+    this.xMan.get<T>(this._endpoint, pagination_query)
     .then((result)=> this.bind_results(result))
     .catch((error)=> this.showError(error))
     .finally(()=> this.loading = false);
   }
 
-  public next(): void {
+  public next(filter?:T): void {
     this.page += 1;
-    this.get();
+    this.get(filter);
   }
 
-  public previous(): void {
+  public previous(filter?: T): void {
     if(this.page > 1) this.page -= 1;
-    this.get();
+    this.get(filter);
   }
 
   /**
@@ -91,10 +90,10 @@ export abstract class DataService<T> implements IDataService{
    *
    * @param endpoint another endpoint
    */
-  public get_by_endpoint(endpoint:string): void{
+  public get_by_endpoint(endpoint:string,pagination: boolean = false): void{
     this.loading = true;
 
-    this.xMan.get<T>(endpoint)
+    this.xMan.get<T>(endpoint+(pagination ? this.get_pagination_query(): ''))
     .then((result)=> this.bind_results(result))
     .catch((error)=> this.showError(error))
     .finally(()=> this.loading = false);
@@ -209,9 +208,15 @@ export abstract class DataService<T> implements IDataService{
     var str = [];
     for (var p in obj){
       if(typeof obj[p] === 'object'){
-        console.log(obj[p])
-        if(this.serialize_query(obj[p]))
-          str.push(encodeURIComponent(p) + "." + this.serialize_query(obj[p]));
+        for (const key in obj[p]) {
+          if(p == 'resource') continue;
+          if (Object.prototype.hasOwnProperty.call(obj[p], key)) {
+            const element = obj[p][key];
+
+            if(this.serialize_query(obj[p]))
+              str.push(encodeURIComponent(p) + "." + this.serialize_query(obj[p]));
+          }
+        }
       }else if (obj.hasOwnProperty(p)) {
         if(encodeURIComponent(obj[p])) str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
       }

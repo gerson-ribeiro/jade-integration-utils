@@ -4,7 +4,6 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule }   from '@angular/forms';
-import { JadeIntegrationUtilsModule } from 'jade-integration-utils';
 import { HttpStatusService } from 'projects/jade-integration-utils/src/public-api';
 
 @NgModule({
@@ -15,12 +14,10 @@ import { HttpStatusService } from 'projects/jade-integration-utils/src/public-ap
     BrowserModule,
     CommonModule,
     FormsModule,
-    HttpClientModule,
-    JadeIntegrationUtilsModule
+    HttpClientModule
   ],
   exports:[
-    HttpClientModule,
-    JadeIntegrationUtilsModule
+    HttpClientModule
   ],
   providers: [ HttpClient,HttpStatusService ],
   bootstrap: [AppComponent]

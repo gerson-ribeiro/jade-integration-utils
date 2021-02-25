@@ -1,8 +1,9 @@
 import { DataService, GenericService } from 'projects/jade-integration-utils/src/public-api';
 
-export class Cards extends DataService<Cards> {
+export class Cards {
+public resource: DataService<Cards>;
   constructor() {
-    super("https://api.magicthegathering.io","v1/cards");
+    this.resource = new DataService<Cards>("https://api.magicthegathering.io","v1/cards");
   }
   public name: string;
   public manaCost: string;

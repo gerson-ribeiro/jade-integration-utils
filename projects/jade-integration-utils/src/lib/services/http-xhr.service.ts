@@ -1,4 +1,4 @@
-import { StorageService } from "../../public-api";
+import { StorageService } from "../services/storage.service";
 import { HttpMethod } from "../Models/HTTPMethod";
 
 export class HttpXHRService {
@@ -9,17 +9,10 @@ export class HttpXHRService {
   constructor(standard_api_url: string) {
     this._standard_url = standard_api_url;
     this._xhttp = new XMLHttpRequest();
-
-    this._xhttp.setRequestHeader("Content-Type", "application/json");
-    this._xhttp.setRequestHeader("Access-Control-Allow-Origin", "*" );
-    this._xhttp.withCredentials = this.get_token() ? true : false;
-    this._xhttp.responseType = "json";
   }
 
   public set_token(auth: string): void {
     StorageService.set(this._AUTH, "Bearer " + auth);
-
-    this._xhttp.setRequestHeader("Authorization", (this.get_token()) ? StorageService.get(this._AUTH) : null);
   }
 
   public get_token(): string {
@@ -63,6 +56,11 @@ export class HttpXHRService {
   }
 
   private _send_request<T>(data = null, timeout = 60000) {
+    this._xhttp.setRequestHeader("Content-Type", "application/json");
+    this._xhttp.setRequestHeader("Access-Control-Allow-Origin", "*" );
+    this._xhttp.withCredentials = this.get_token() ? true : false;
+    this._xhttp.responseType = "json";
+    this._xhttp.setRequestHeader("Authorization", (this.get_token()) ? StorageService.get(this._AUTH) : null);
     return new Promise<T>((resolve, reject) => {
         this._xhttp.onreadystatechange = function() {
             if (this.readyState==4) {

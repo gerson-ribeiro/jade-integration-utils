@@ -1,10 +1,10 @@
-<input type="text" name="name" [(ngModel)]="name" (keydown.enter)="search()">
+<input type="text" name="name" [(ngModel)]="filter.name" (keydown.enter)="search()">
 <button (click)="search()">Procurar</button>
-<div *ngIf="this.dataService.loading">
+<div *ngIf="this.dataService.resource.loading">
   Carregando...
 </div>
-<div *ngIf="!this.dataService.loading" style="display:block; max-width: 100%;">
-  <div *ngFor="let card of dataService.results.cards" style="text-align: center; width:100px;">
+<div *ngIf="!this.dataService.resource.loading" style="display:block; max-width: 100%;">
+  <div *ngFor="let card of dataService.resource.results.cards" style="text-align: center; width:100px;">
     <img [src]="card.imageUrl" style="max-width: 100px;" *ngIf="card.imageUrl"/>
     <p *ngIf="card.imageUrl">{{card.name}}</p>
   </div>

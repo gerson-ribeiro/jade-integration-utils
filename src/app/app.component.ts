@@ -8,12 +8,13 @@ import { GenericService } from 'projects/jade-integration-utils/src/public-api';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public name: string;
+  public filter: Cards;
   public dataService: Cards;
 
   constructor(
   ) {
     this.dataService = new Cards();
+    this.filter = new Cards();
   }
 
   ngOnInit(): void {
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
   }
 
   public search(){
-    this.dataService.get(this.dataService);
+    this.dataService.resource.get(this.filter);
   }
   // public search(){
   //   this.dataService.create<any,any>({ Mail: "gerson@jedisistemas.com.br", Pass: "mainpaper2020" },'auth',false)
