@@ -1,11 +1,11 @@
 ## JadeIntegrationUtils
 
 A tool made for any type of http requisitions and to manage localstorage.
-This package works into Angular and Ionic projects (maybe you can run this on ReactNative, MAYBE!).
+This package works into Angular and Ionic projects (maybe you can run this in ReactNative, MAYBE!).
 
 ## Setup
 
-First use
+Installation
 ```
 npm install jade-integration-utils --save
 ```
@@ -16,94 +16,148 @@ then...
 1. Declare DataService on your model:
 Example:
 ```
-export class Model extends DataService<Model>{
-  constructor(genericService: GenericService) {
-    super(genericService,"https://my.providers.here","my_endpoint");
-    /** another things here */
+export class Model{  
+  constructor() {
+    this.resource = new DataService<Model>("http://your.api.service","your.endpoint");
   }
+  //You must implement the integration source with property name "resource". 
+  //If you didn't, the DataService object will break when call every get method.
+  public resource: DataService<Model>;
   public id: number;
+  public name: string;
   /** another things here  */
 }
 ```
-2. In your component, anything like that:
+2. In your component,you can implement like this example:
 
 ```
-/** same imports here */
-import { GenericService } from 'jade-integration-utils';
-
+(...)
 @Component({
   selector: 'app-model',
-  templateUrl: './model.page.html',
+  templateUrl: '
+  <input type="text" name="id" [(ngModel)]="filter.id" (keydown.enter)="search()">
+  <button (click)="search()">Procurar</button>
+  <div *ngIf="this.model.resource.loading">
+    Carregando...
+  </div>
+  <div *ngIf="!this.model.resource.loading" style="display:block; max-width: 100%;">
+    <div *ngFor="let OBJECT of model.resource.results.MY-LIST-OBJECT" style="text-align: center; width:100px;">
+      ...
+    </div>
+  </div>
+  ',
   styleUrls: ['./model.page.scss'],
 })
 export class ModelPage implements OnInit {
   public model: Model;
+  public filter: Model;
 
   constructor(
     /** Import Here */
-    generic_service: GenericService
   ) { 
-    /** Reference service here again */
-    this.model = new Model(generic_service);
+    this.model = new Model();
+    this.filter = new Model();
   }
 
   ngOnInit() {
+    this.search();
   }
 
   public search():void {
-    /** call find to send "get" */
-    this.model.find();
+    /** call get to send "get" */
+    this.model.resource.get(this.filter);
   }
 }
 
 ```
 
-3. In your module, import HttpClientModule:
+#### OPTIONAL - Pagination in 4.x.x version!
+You could use pagination with the framework as optional way to implement.
+Note: In this case, I use ```*ngFor="let your_model_object of model.resource.results.element_list"``` to get list of response, but it is necessary implements "objects" to your get method to return this info.
 ```
-/** same imports here */
-import { HttpClientModule } from '@angular/common/http';
-
-@NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [
-    /** another import */
-    HttpClientModule,
-    /** another import */
-  ],
-  .
-  .
-  .
-})
-export class AppModule {}
-
-```
-After that, you can access the response of your requisition in ```this.model.results```, then you could use it in your code;
-
-```
-  <div *ngFor="let model of model.results; let index = i">
-    <!-- Anything here -->
+@Component({
+  selector: 'app-model',
+  templateUrl: '
+  <input type="text" name="name" [(ngModel)]="filter.name" (keydown.enter)="search()">
+  <button (click)="search()">Procurar</button>
+  <div *ngIf="this.model.resource.loading">
+    Carregando...
   </div>
-```
-To use Post and Put, you can set the attributes on ```this.model.target```, and send a body with these configuration.
+  <div *ngIf="!this.model.resource.loading" style="display:block; max-width: 100%;">
+    <div *ngFor="let your_model_object of model.resource.results.element_list" style="text-align: center; width:100px;">
+      ...
+    </div>
+    ...
+    <div *ngIf="model.resource.page_array.lenght > 2 ">
+      <button (click)="model.resource.previous()">Previous</button>
+      <div *ngFor="let indexPage of model.resource.page_array">
+        <button (click)="to_page(indexPage)">{{indexPage}}</button>
+      </div>
+      <button (click)="model.resource.next()">Next</button>
+    </div>
+  </div>
+  ',
+  styleUrls: ['./model.page.scss'],
+})
+export class ModelPage implements OnInit {
+  public model: Model;
+  public filter: Model;
 
+  constructor(
+    /** Import Here */
+  ) { 
+    this.model = new Model();
+    this.filter = new Model();
+  }
+
+  ngOnInit() {
+    this.search();
+  }
+
+  public search():void {
+    /** call get with second paramater like true to use PagedResults */
+    this.model.resource.get(this.filter,true);
+  }
+  
+  public to_page(indexPage): void{
+    this.model.resource.page = indexPage;
+    
+    this.search();
+  }
+}
+```
+For that example, your Back-End service must accept page, fetch and itemsCount as queryParameters to filter.
+Here is a single example of backend service required returns to this feature:
+```
+{
+    "itemsCount": 50,
+    "page": 2,
+    "fetch": 10,
+    "objects": [
+      ...
+    ],
+    "target": {"your_object":null}
+}
+```
+To use Post and Put, you can set the attributes on ```this.model.resource.target```, and send a body with these configuration.
+Api's return you can retrive with ```this.model.resource.results```.
 ```
   public save(): void{
-    this.model.post(body_if_I_want,(results)=>{ /** callback function if i need */});
+    this.model.resource.create(body_if_I_want,(results)=>{ /** callback function if i need */});
   }
   /** In put method you can't send a body in method, in this case, use this.model.target */
   public update(): void{
-    this.model.put((results)=>{ /** callback function if i need */});
+    this.model.resource.update((results)=>{ /** callback function if i need */});
   }
 ```
-This way you could use ```this.model.loading``` to set up html things, until the httpRequest finish.
+You could use ```this.model.resource.loading``` to set up html blocks until httpRequest finish.
 Example:
 ```
-  <div *if="model.loading">
+  <div *if="model.resource.loading">
     Loading ...
   </div>
-  <div *if="!model.loading">
-    <div *ngFor="let model of model.results; let index = i">
+  <div *if="!model.resource.loading">
+    <div *ngFor="let model of model.resource.results; let index = i">
       <!-- Anything here -->
     </div>
   </div>
@@ -163,7 +217,7 @@ To Insert:
 ```
 To Get:
 ```
-  public setFoo():void{
+  public getFoo():void{
     let index = StorageService.get("index");
     // or
     let indexTemp = StorageService.getTemp();
