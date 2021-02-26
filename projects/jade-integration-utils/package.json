@@ -1,6 +1,6 @@
 {
   "name": "jade-integration-utils",
-  "version": "4.9.6",
+  "version": "4.10.6",
   "peerDependencies": {
     "@angular/common": "^9.1.0",
     "@angular/core": "^9.1.0",
@@ -10,8 +10,11 @@
     "httpClient",
     "framework",
     "Http",
-    "JediSistemas",
-    "Requisitions"
+    "REST",
+    "Requisitions",
+    "Integration",
+    "Integração"
+
   ],
   "author": "Gerson Abimael Ribeiro de Paula <gerson.abimael.rp@gmail.com>"
 }

@@ -46,9 +46,9 @@ export class DataService<T> implements IDataService{
   }
 
   private bind_results(result: Result<T>): any {
-    this.page = result.page;
-    this.fetch = result.fetch;
-    this.itemsCount = result.itemsCount;
+    this.page = result.page ?? this.page;
+    this.fetch = result.fetch ?? this.fetch;
+    this.itemsCount = result.itemsCount ?? this.itemsCount;
     if(result.objects != null) this.element_list = result.objects;
     if(result.target != null) this.target = result.target;
     this.results = result;
@@ -58,7 +58,8 @@ export class DataService<T> implements IDataService{
 
   public get(filter?: T,pagination: boolean = false): void {
     this.loading = true;
-    let query = this.serialize_query(filter)+ (pagination ? this.get_pagination_query(): '');
+    let query = this.serialize_query(filter)+ (pagination ? '&'+this.get_pagination_query(): '');
+    console.log(query);
 
     this.xMan.get<T>(this._endpoint,query)
     .then((result)=> this.bind_results(result))
@@ -69,6 +70,9 @@ export class DataService<T> implements IDataService{
   public getAll(pagination: boolean = false): void {
     this.loading = true;
     let pagination_query = (pagination ? this.get_pagination_query(): '');
+
+    console.log(pagination);
+
     this.xMan.get<T>(this._endpoint, pagination_query)
     .then((result)=> this.bind_results(result))
     .catch((error)=> this.showError(error))
@@ -77,12 +81,12 @@ export class DataService<T> implements IDataService{
 
   public next(filter?:T): void {
     this.page += 1;
-    this.get(filter);
+    this.get(filter,true);
   }
 
   public previous(filter?: T): void {
     if(this.page > 1) this.page -= 1;
-    this.get(filter);
+    this.get(filter,true);
   }
 
   /**
@@ -90,8 +94,10 @@ export class DataService<T> implements IDataService{
    *
    * @param endpoint another endpoint
    */
-  public get_by_endpoint(endpoint:string,pagination: boolean = false): void{
+  public get_by_endpoint(endpoint:string,query_params?:any,pagination: boolean = false): void{
     this.loading = true;
+
+    console.log(pagination);
 
     this.xMan.get<T>(endpoint+(pagination ? this.get_pagination_query(): ''))
     .then((result)=> this.bind_results(result))

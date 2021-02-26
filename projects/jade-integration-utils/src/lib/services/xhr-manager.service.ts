@@ -21,7 +21,6 @@ export class XHRManager{
     let new_endpoint = '';
 
     if(queryParams){
-      console.log(queryParams);
       new_endpoint = '/' +endpoint+'?'+queryParams;
     }else{
       new_endpoint = '/'+ endpoint;
@@ -39,7 +38,6 @@ export class XHRManager{
     let new_endpoint = '';
 
     if(queryParams){
-      console.log(queryParams);
       new_endpoint = '/' +endpoint+'?'+queryParams;
     }else{
       new_endpoint = '/'+ endpoint;
@@ -56,7 +54,6 @@ export class XHRManager{
     let new_endpoint = '';
 
     if(queryParams){
-      console.log(queryParams);
       new_endpoint = '/' +endpoint+'?'+queryParams;
     }else{
       new_endpoint = '/'+ endpoint;
