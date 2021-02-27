@@ -67,7 +67,7 @@ export class HttpXHRService {
                 resolve(this.response);
             }
         }
-        this._xhttp.send(data);
+        this._xhttp.send(JSON.stringify(data));
         if (timeout) {
             setTimeout(function() {
                 reject("timeout");

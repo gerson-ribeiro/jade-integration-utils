@@ -1,4 +1,4 @@
-<input type="text" name="name" [(ngModel)]="filter.name" (keydown.enter)="search()">
+<!-- <input type="text" name="name" [(ngModel)]="filter.name" (keydown.enter)="search()">
 <button (click)="search()">Procurar</button>
 <div *ngIf="this.dataService.resource.loading">
   Carregando...
@@ -8,4 +8,8 @@
     <img [src]="card.imageUrl" style="max-width: 100px;" *ngIf="card.imageUrl"/>
     <p *ngIf="card.imageUrl">{{card.name}}</p>
   </div>
-</div>
+</div> -->
+
+<input type="text" name="name" [(ngModel)]="auth.Mail">
+<input type="text" name="name" [(ngModel)]="auth.Pass">
+<button (click)="entrar()">Entrar</button>

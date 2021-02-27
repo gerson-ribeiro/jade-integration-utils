@@ -7,7 +7,6 @@ import { Result } from './Paginator';
 export class DataService<T> implements IDataService{
   public static user_session: string = "session-user";
   public element_list: Array<T>;
-  public target: T;
   public page_array : Array<number>;
   public page : number;
   public fetch : number;
@@ -25,8 +24,6 @@ export class DataService<T> implements IDataService{
     this.xMan = new XHRManager(api_url,endpoint);
     this.element_list = new Array<T>();
     this.loading = false;
-    this.target = null;
-
     this._endpoint = endpoint;
   }
 
@@ -50,7 +47,9 @@ export class DataService<T> implements IDataService{
     this.fetch = result.fetch ?? this.fetch;
     this.itemsCount = result.itemsCount ?? this.itemsCount;
     if(result.objects != null) this.element_list = result.objects;
-    if(result.target != null) this.target = result.target;
+    if(result.target != null){
+      
+    }
     this.results = result;
 
     this.get_pages_array();
@@ -108,18 +107,18 @@ export class DataService<T> implements IDataService{
   /**
    * this function calls a http post from before configured api
    *
-   * @param body @optional parameter that send's a custom body
+   * @param body  parameter that send's a different custom body
    * @param callbackHandler @optional function to call when requests finish
+   * @param message @optional string to show after requests finish
    */
-  public create(body: any = null, callbackHandler?: any): void {
+  public post(body: any, callbackHandler?: any,message?:string): void {
     this.loading = true;
-    let body_send = body || this.target;
 
-    this.xMan.post<T,any>(body_send,this._endpoint)
+    this.xMan.post<T,any>(this.remove_resource(body),this._endpoint)
     .then((result)=>{
       this.results = result;
       if(result){
-        alert("Registrado com sucesso");
+        alert(message || "Registrado com sucesso");
         if(callbackHandler) callbackHandler(result);
       }else{
         alert("Ocorreu um erro!");
@@ -130,18 +129,63 @@ export class DataService<T> implements IDataService{
   }
 
   /**
-   * this function calls a http put from before configured api
+   * this function calls a http post from before configured api
    *
+   * @param body parameter that send's a custom body
    * @param callbackHandler @optional function to call when requests finish
-   *
+   * @param message @optional string to show after requests finish
    */
-  public update(callbackHandler?: any): void {
+  public create(body: T, callbackHandler?: any,message?: string): void {
     this.loading = true;
-    this.xMan.put<any, T>(this.target,this._endpoint)
+
+    this.xMan.post<T,any>(this.remove_resource(body),this._endpoint)
+    .then((result)=>{
+      this.results = result;
+      if(result){
+        alert(message || "Registrado com sucesso");
+        if(callbackHandler) callbackHandler(result);
+      }else{
+        alert("Ocorreu um erro!");
+      }
+    })
+    .catch((error)=> this.showError(error))
+    .finally(()=> this.loading = false);
+  }
+
+  /**
+   * call's a Put method to the url before configured
+   * @param body of requisition of request
+   * @param callbackHandler function that call's on request's finished
+   * @param message @optional string to show after requests finish
+   */
+  public update(body:T,callbackHandler?: any,message?: string): void {
+    this.loading = true;
+    this.xMan.put<any, T>(this.remove_resource(body),this._endpoint)
     .then((result)=>{
       this.results = result;
       if(result.target > 0){
-        alert("Atualizado com sucesso");
+        alert(message || "Atualizado com sucesso");
+        if(callbackHandler) callbackHandler();
+      }else{
+        alert("Ocorreu um erro!");
+      }
+    })
+    .catch((error)=> this.showError(error))
+    .finally(()=> this.loading = false);
+  }
+/**
+ * call's a Put method to the url before configured
+ * @param body of requisition of request
+ * @param callbackHandler function that call's on request's finished
+* @param message @optional string to show after requests finish 
+ */
+  public put(body:any,callbackHandler?: any,message?: string): void {
+    this.loading = true;
+    this.xMan.put<any, T>(body,this._endpoint)
+    .then((result)=>{
+      this.results = result;
+      if(result.target > 0){
+        alert(message || "Atualizado com sucesso");
         if(callbackHandler) callbackHandler();
       }else{
         alert("Ocorreu um erro!");
@@ -230,6 +274,25 @@ export class DataService<T> implements IDataService{
     var results = str.join("&");
 
     return results;
+  }
+  public auto_bind(result,target) : void {
+    for (var p in result){
+      if (target.hasOwnProperty(p) && result.hasOwnProperty(p)) {
+        target[p] = result[p];
+      }
+    }
+  }
+
+  public remove_resource(target) : any {
+    for (var p in target){
+      if (target.hasOwnProperty(p)) {
+        if(p == 'resource'){
+          delete target[p];
+        };
+      }
+    }
+    console.log(target);
+    return target;
   }
 
   static normalizeString(text){
