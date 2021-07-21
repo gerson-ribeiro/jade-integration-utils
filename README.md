@@ -126,7 +126,7 @@ export class ModelPage implements OnInit {
   }
 }
 ```
-For that example, your Back-End service must accept page, fetch and itemsCount as queryParameters to filter.
+In this example, your Back-End service must accept page, fetch and itemsCount as queryParameters to filter.
 Here is a single example of backend service required returns to this feature:
 ```
 {
@@ -143,9 +143,9 @@ To use Post and Put, you can set the attributes on ```this.model.resource.target
 Api's return you can retrive with ```this.model.resource.results```.
 ```
   public save(): void{
-    this.model.resource.create(body_if_I_want,(results)=>{ /** callback function if i need */});
+    this.model.resource.create(body_if_I_want,(results)=>{ /** callback function if you need it */});
   }
-  /** In put method you can't send a body in method, in this case, use this.model.target */
+  /** In PUT method you aren't able to send a body requisition, in this case, use this.model.target */
   public update(): void{
     this.model.resource.update((results)=>{ /** callback function if i need */});
   }
