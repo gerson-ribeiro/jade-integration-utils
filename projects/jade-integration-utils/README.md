@@ -1,7 +1,7 @@
 ## JadeIntegrationUtils
 
 A tool made for any type of http requisitions and to manage localstorage.
-This package works into Angular and Ionic projects (maybe you can run this on ReactNative, MAYBE!).
+This package works into Angular and Ionic projects.
 
 ## Setup
 
